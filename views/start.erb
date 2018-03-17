@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="<%= url("/stylesheets/start.css") %>">
+    <title>Hangman</title>
+</head>
+<body>
+    <form method="get" action="/start">
+        <label>
+            Select dictionary:
+            <select name="file_name">
+                <% @file_names.each do |name| %>
+                        <option value="<%= name %>"><%= name %></option>
+                <% end %>
+            </select>
+        </label>
+        <button type="submit">OK</button>
+    </form>
+
+    <form method="post" action="/new">
+        <button type="submit">New game</button>
+    </form>
+
+    <form method="get" action="/start">
+        <input type='text' name='guess' autofocus/>
+        <button type="submit">Guess</button>
+    </form>
+
+    <p class="fields"><%= @@fields %></p>
+    <p>Used letters: <%= @@used_letters.join(", ") %></p>
+    <p>Number of attempts: <%= @@number_of_attempts %></p>
+    <p><%= @@message %></p>
+    
+</body>
+</html>
