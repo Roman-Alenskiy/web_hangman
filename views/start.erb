@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href="<%= url("/stylesheets/normalize.css ") %>">
-    <link rel="stylesheet" type="text/css" href="<%= url("/stylesheets/start.css ") %>">
+    <link rel="stylesheet" type="text/css" href="<%= url("/stylesheets/style_start.css ") %>">
     <title>Hangman</title>
 </head>
 
@@ -37,19 +37,27 @@
                 <input type='text' name='guess' pattern="[a-zа-я]" title="Only a-z or а-я" maxlength="1" autocomplete="off" autofocus/>
                 <button type="submit">Guess</button>
             </form>
+            
 
             <div class="fields">
                 <p><%= @@fields %></p>
             </div>
-            <p class="used-letters">Used letters:
+
+            <div class="hangman">
+                <img src="<%= "/images/hangman#{@@number_of_attempts}.png" %>" alt="hangman.png">
+            </div>
+
+            <div class="used-letters">Used letters:
                 <strong><%= @@used_letters.join(", ") %></strong>
-            </p>
-            <p class="number-of-attempts">Number of attempts:
+            </div>
+
+            <div class="number-of-attempts">Number of attempts:
                 <strong><%= @@number_of_attempts %></strong>
-            </p>
-            <p class="message">
+            </div>
+
+            <div class="message">
                 <%= @@message %>
-            </p>
+            </div>
         </main>
         <aside class="l_aside">
         </aside>
