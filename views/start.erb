@@ -1,36 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="<%= url("/stylesheets/start.css") %>">
+    <link rel="stylesheet" type="text/css" href="<%= url("/stylesheets/normalize.css ") %>">
+    <link rel="stylesheet" type="text/css" href="<%= url("/stylesheets/start.css ") %>">
     <title>Hangman</title>
 </head>
+
 <body>
-    <form method="get" action="/start">
-        <label>
-            Select dictionary:
-            <select name="file_name">
-                <% @file_names.each do |name| %>
-                        <option value="<%= name %>"><%= name %></option>
-                <% end %>
-            </select>
-        </label>
-        <button type="submit">OK</button>
-    </form>
+    <div class="container">
+        <header class="header">
+            <img class="logo" src="/images/logo.png" alt="logo"> 
+            <p class="headline">Hangman</p>
+        </header>
+        <main class="main">
+            <form method="get" action="/start" class="dictionary-select">
+                <label>
+                    Select dictionary:
+                    <select name="file_name">
+                        <% @file_names.each do |name| %>
+                            <option value="<%= name %>">
+                                <%= name %>
+                            </option>
+                            <% end %>
+                    </select>
+                </label>
+                <button type="submit">OK</button>
+            </form>
 
-    <form method="post" action="/new">
-        <button type="submit">New game</button>
-    </form>
+            <form method="post" action="/new" class="new-game">
+                <button type="submit">New game</button>
+            </form>
 
-    <form method="get" action="/start">
-        <input type='text' name='guess' autofocus/>
-        <button type="submit">Guess</button>
-    </form>
+            <form method="get" action="/start" class="guess">
+                <input type='text' name='guess' pattern="[a-zа-я]" title="Only a-z or а-я" maxlength="1" autocomplete="off" autofocus/>
+                <button type="submit">Guess</button>
+            </form>
 
-    <p class="fields"><%= @@fields %></p>
-    <p>Used letters: <%= @@used_letters.join(", ") %></p>
-    <p>Number of attempts: <%= @@number_of_attempts %></p>
-    <p><%= @@message %></p>
-    
+            <div class="fields">
+                <p><%= @@fields %></p>
+            </div>
+            <p class="used-letters">Used letters:
+                <strong><%= @@used_letters.join(", ") %></strong>
+            </p>
+            <p class="number-of-attempts">Number of attempts:
+                <strong><%= @@number_of_attempts %></strong>
+            </p>
+            <p class="message">
+                <%= @@message %>
+            </p>
+        </main>
+        <aside class="l_aside">
+        </aside>
+        <aside class="r_aside">
+        </aside>
+        <footer class="footer">
+        </footer>
+    </div>
 </body>
+
 </html>

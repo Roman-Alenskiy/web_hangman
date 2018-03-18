@@ -32,7 +32,7 @@ get '/start' do
     end
 
     if !(params['guess'].nil?) && (@@number_of_attempts != 0) && (@@fields != @@secret_word.join)
-        @@message = "Choose the dictionary first!" unless @@fields != " "
+        @@message = "Choose the dictionary first!" if @@fields == " "
         @@suitable_letters = @@secret_word.each_index.select {|index| @@secret_word[index] == params['guess']}
         push_used_letter(@@used_letters, params['guess'])
         unless @@suitable_letters.empty?
@@ -47,6 +47,7 @@ get '/start' do
 end
 
 post '/new' do
+    @@message = "Choose the dictionary first!" if @@fields == " "
     is_new_game = true
     redirect "/start"
 end
