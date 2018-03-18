@@ -4,7 +4,7 @@ require_relative "hangman"
 include Hangman
 
 get '/' do
-    erb :index
+    redirect '/start'
 end
 
 current_dictionary = ""
