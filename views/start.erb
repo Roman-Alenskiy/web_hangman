@@ -40,23 +40,23 @@
             
 
             <div class="fields">
-                <p><%= @@fields %></p>
+                <p><%= fields %></p>
             </div>
 
             <div class="hangman">
-                <img src="<%= "/images/hangman#{@@number_of_attempts}.png" %>" alt="hangman.png">
+                <img src="<%= "/images/hangman#{number_of_attempts}.png" %>" alt="hangman.png">
             </div>
 
             <div class="used-letters">Used letters:
-                <strong><%= @@used_letters.join(", ") %></strong>
+                <strong><%= used_letters.join(", ") %></strong>
             </div>
 
             <div class="number-of-attempts">Number of attempts:
-                <strong><%= @@number_of_attempts %></strong>
+                <strong><%= number_of_attempts %></strong>
             </div>
 
             <div class="message">
-                <%= @@message %>
+                <%= message %>
             </div>
         </main>
         <aside class="l_aside">
