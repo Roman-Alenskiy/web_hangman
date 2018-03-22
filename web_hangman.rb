@@ -7,6 +7,7 @@ get '/' do
     redirect '/start'
 end
 
+enable :sessions
 set :current_dictionary, ""
 set :is_new_game, false
 set :dictionary, ""
@@ -18,6 +19,7 @@ set :number_of_attempts, 6
 set :message, ""
 
 get '/start' do
+    session[:guess] = params['guess']
     @file_names = find_files("dictionary") 
 
     if !(params['file_name'].nil?) && (settings.dictionary.empty? || settings.current_dictionary != params['file_name'])
@@ -43,7 +45,7 @@ get '/start' do
         gameover_check
     end
 
-    erb :start, :locals => {:file_name => params['file_name'], :dictionary => settings.dictionary, :secret_word => settings.secret_word, :fields => settings.fields, :suitable_letters => settings.suitable_letters, :used_letters => settings.used_letters, :number_of_attempts => settings.number_of_attempts, :message => settings.message}
+    erb :start, :locals => {:session => session, :file_name => params['file_name'], :dictionary => settings.dictionary, :secret_word => settings.secret_word, :fields => settings.fields, :suitable_letters => settings.suitable_letters, :used_letters => settings.used_letters, :number_of_attempts => settings.number_of_attempts, :message => settings.message}
 end
 
 post '/new' do
