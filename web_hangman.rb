@@ -8,66 +8,71 @@ get '/' do
 end
 
 enable :sessions
-set :current_dictionary, ""
-set :is_new_game, false
-set :dictionary, ""
-set :secret_word, []
-set :fields, " "
-set :suitable_letters, []
-set :used_letters, []
-set :number_of_attempts, 6
-set :message, ""
 
 get '/start' do
-    session[:guess] = params['guess']
+    initial_assignment
     @file_names = find_files("dictionary") 
 
-    if !(params['file_name'].nil?) && (settings.dictionary.empty? || settings.current_dictionary != params['file_name'])
-        settings.dictionary = load_file("dictionary", params['file_name'])
+    if !(params['file_name'].nil?) && (session['current_dictionary'] != params['file_name'])
+        session['current_dictionary'] = params['file_name']
         game_refresh
-        settings.current_dictionary = params['file_name']
     end
 
-    if !(settings.dictionary.empty?) && (settings.is_new_game)
+    if !(session['current_dictionary'].empty?) && (session['is_new_game'])
         game_refresh
-        settings.is_new_game = false
+        session['is_new_game'] = false
     end
 
-    if !(params['guess'].nil?) && (settings.number_of_attempts != 0) && (settings.fields != settings.secret_word.join)
-        settings.message = "Choose the dictionary first!" if settings.fields == " "
-        settings.suitable_letters = settings.secret_word.each_index.select {|index| settings.secret_word[index] == params['guess']}
-        push_used_letter(settings.used_letters, params['guess'])
-        unless settings.suitable_letters.empty?
-            step(settings.suitable_letters, settings.fields, settings.secret_word)
+    if !(params['guess'].nil?) && (session['number_of_attempts'] != 0) && (session['fields'] != session['secret_word'].join)
+        session['suitable_letters'] = session['secret_word'].each_index.select {|index| session['secret_word'][index] == params['guess']}
+        if !(session['suitable_letters'].empty?)
+            step(session['suitable_letters'], session['fields'], session['secret_word'])
+            push_used_letter(session['used_letters'], params['guess'])
+        elsif session['current_dictionary'].empty?
+            session['message'] = "Choose the dictionary first!"
         else
-            settings.number_of_attempts -= 1
+            session['number_of_attempts'] -= 1
+            push_used_letter(session['used_letters'], params['guess'])
         end
         gameover_check
     end
 
-    erb :start, :locals => {:session => session, :file_name => params['file_name'], :dictionary => settings.dictionary, :secret_word => settings.secret_word, :fields => settings.fields, :suitable_letters => settings.suitable_letters, :used_letters => settings.used_letters, :number_of_attempts => settings.number_of_attempts, :message => settings.message}
+    erb :start, :locals => {:current_dictionary => session['current_dictionary'], :dictionary => session['dictionary'], :secret_word => session['secret_word'], :fields => session['fields'], :suitable_letters => session['suitable_letters'], :used_letters => session['used_letters'], :number_of_attempts => session['number_of_attempts'], :message => session['message']}
 end
 
 post '/new' do
-    settings.message = "Choose the dictionary first!" if settings.fields == " "
-    settings.is_new_game = true
+    session['message'] = "Choose the dictionary first!" if session['fields'] == " "
+    session['is_new_game'] = true
     redirect "/start"
 end
 
 def game_refresh
-    settings.secret_word = choose_word(settings.dictionary)
-    settings.fields = "_" * settings.secret_word.size
-    settings.used_letters = []
-    settings.number_of_attempts = 6
-    settings.message = ""
+    session['secret_word'] = choose_word(session['current_dictionary'])
+    session['fields'] = "_" * session['secret_word'].size
+    session['used_letters'] = []
+    session['number_of_attempts'] = 6
+    session['message'] = ""
 end
 
 def gameover_check
-    if settings.number_of_attempts == 0
-        settings.message = "Game over! (answer was: '#{settings.secret_word.join}')"
+    if session['number_of_attempts'] == 0
+        session['message'] = "Game over! (answer was: '#{session['secret_word'].join}')"
     end
 
-    if settings.fields == settings.secret_word.join
-        settings.message = "YOU WIN!"
+    if session['fields'] == session['secret_word'].join
+        session['message'] = "YOU WIN!"
+    end
+end
+
+def initial_assignment
+    if session['secret_word'].nil?
+        session['current_dictionary'] = ""
+        session['is_new_game'] = false
+        session['secret_word'] = []
+        session['fields'] = " "
+        session['suitable_letters'] = []
+        session['used_letters'] = []
+        session['number_of_attempts'] = 6
+        session['message'] = ""
     end
 end

@@ -11,9 +11,12 @@ module Hangman
         used_letters.uniq!
     end
 
-    def choose_word(dictionary)
-        dictionary.downcase!
-        dictionary.split("\n").sample.split("").delete_if {|char| char == "\r"}
+    def choose_word(current_dictionary)
+        dictionary = load_file('dictionary', current_dictionary)
+        word = dictionary.split("\n").sample
+        word.downcase!
+        word = word.split("").delete_if {|char| char == "\r"}
+        return word
     end
 
     def find_files(catalog_name)

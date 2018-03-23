@@ -19,11 +19,12 @@
                 <label>
                     Select dictionary:
                     <select name="file_name">
+                        <option value="" selected disabled hidden><%= current_dictionary %></option>
                         <% @file_names.each do |name| %>
                             <option value="<%= name %>">
                                 <%= name %>
                             </option>
-                            <% end %>
+                        <% end %>
                     </select>
                 </label>
                 <button type="submit">OK</button>
@@ -60,8 +61,6 @@
             </div>
         </main>
         <aside class="l_aside">
-            <p style="color:red">TESTING</p>
-            <p><%= session[:guess] %></p>
         </aside>
         <aside class="r_aside">
         </aside>
